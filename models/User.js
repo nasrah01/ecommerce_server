@@ -1,6 +1,4 @@
-import mongoose from 'mongoose'
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
   forename: {
@@ -24,26 +22,9 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     trim: true,
     minlength: 8,
-    select:false
+    select: false,
   },
+  refreshToken: String
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    next();
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-UserSchema.methods.matchPasswords = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
-
-UserSchema.methods.createJWT = function () {
-  return jwt.sign({userId:this._id},process.env.JWT_SECRET,{expiresIn: process.env.JWT_TIME})
-}
-
-export default mongoose.model('User', UserSchema)
+export default mongoose.model("User", UserSchema);
