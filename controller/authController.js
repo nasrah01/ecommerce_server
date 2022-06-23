@@ -33,10 +33,14 @@ const login = async(req, res) => {
     .exec();
 
   if(!findUser) {
-    return res.sendStatus(401)
+    return res.status(401).json({'msg': 'Username not found!'})
   } 
 
   const verify = await bcrypt.compare(password, findUser.password)
+  if(!verify) {
+    return res.status(401).json({ msg: "Password is incorrect, please try again!" });
+  }
+
   if(verify) {
      const accessToken = jwt.sign(
        {
@@ -70,4 +74,24 @@ const login = async(req, res) => {
   }
 }
 
-export {register, login}
+const logout = async (req, res) => {
+
+  const cookies = req.cookies;
+  if (!cookies?.jwt) return res.sendStatus(204);
+  const refreshToken = cookies.jwt;
+
+  const user = await User.findOne({ refreshToken }).exec();
+  if (!user) {
+    res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
+    return res.sendStatus(204);
+  }
+
+  user.refreshToken = "";
+  const result = await user.save();
+  console.log(result);
+
+  res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
+  res.sendStatus(204);
+};
+
+export {register, login, logout}
