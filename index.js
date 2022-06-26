@@ -7,6 +7,7 @@ import connectDB from './db/connect.js'
 import authRoute from './routes/authRoutes.js'
 
 const app = express()
+const PORT = 5000;
 
 const whitelist = ["http://localhost:3000"];
 const corsOptions = {
@@ -32,7 +33,7 @@ app.get("/", (req, res) => {
 
 const start = async() => {
   await connectDB(process.env.MONGO_URL)
-  app.listen(5000, () => {
+  app.listen(process.env.PORT || 5000, () => {
     console.log("server started");
   });
 }
