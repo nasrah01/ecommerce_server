@@ -23,11 +23,7 @@ const corsOptions = {
   },
   optionsSuccessStatus: 200,
 };
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
+
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -35,9 +31,6 @@ app.use(cookieParser());
 
 app.use('/auth', authRoute)
 
-app.get("/", (req, res) => {
-  res.send('Welcome to shop-k')
-});
 
 const start = async() => {
   await connectDB(process.env.MONGO_URL)
