@@ -1,8 +1,8 @@
 const allowedOrigins = [
-  "https://grand-lokum-45486f.netlify.app/",
+  "https://grand-lokum-45486f.netlify.app",
   "http://localhost:3500",
   "http://localhost:3000",
-  "https://ecommerce-shopk.herokuapp.com/",
+  "https://ecommerce-shopk.herokuapp.com",
 ];
 
 const credentials = (req, res, next) => {
