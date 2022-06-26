@@ -9,7 +9,10 @@ import authRoute from './routes/authRoutes.js'
 const app = express()
 const PORT = process.env.PORT || 5000;
 
-const whitelist = ["http://localhost:3000"];
+const whitelist = [
+  "http://localhost:3000",
+  "https://ecommerce-shopk.herokuapp.com/",
+];
 const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {
