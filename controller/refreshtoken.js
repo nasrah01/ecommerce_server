@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(401);
+  if (!cookies?.jwt) return res.sendStatus(403); 
   const refreshToken = cookies.jwt;
 
   const findUser = await User.findOne({ refreshToken }).exec();
@@ -11,6 +11,7 @@ const handleRefreshToken = async (req, res) => {
   jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (err, decoded) => {
     if (err || findUser.username !== decoded.username)
       return res.sendStatus(403);
+    const username = findUser.forename
     const accessToken = jwt.sign(
       {
         UserInfo: {
@@ -18,9 +19,9 @@ const handleRefreshToken = async (req, res) => {
         },
       },
       process.env.JWT_TOKEN,
-      { expiresIn: "10m" }
+      { expiresIn: "15m" }
     );
-    res.json({ accessToken });
+    res.json({ username, accessToken });
   });
 };
 

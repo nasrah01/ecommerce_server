@@ -11,7 +11,7 @@ const register = async(req, res) => {
 
   const duplicate = await User.findOne({username}).exec()
 
-  if(duplicate) return res.sendStatus(409)
+  if(duplicate) return res.status(409).json({'msg': 'Username taken'})
 
   try {
     const hashedpwd = await bcrypt.hash(password, 10)
@@ -49,7 +49,7 @@ const login = async(req, res) => {
          },
        },
        process.env.JWT_TOKEN,
-       { expiresIn: '10m' }
+       { expiresIn: '15m' }
      );
 
      const refreshToken = jwt.sign(
@@ -60,15 +60,11 @@ const login = async(req, res) => {
 
      findUser.refreshToken = refreshToken
      const result = await findUser.save()
+     console.log(result)
 
-     res.cookie("jwt", refreshToken, {
-       httpOnly: true,
-       secure: true,
-       sameSite: "None",
-       maxAge: 24 * 60 * 60 * 1000,
-     });
+     res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
 
-     res.json({ accessToken });
+     res.json({ accessToken});
   } else {
     res.sendStatus(401)
   }
