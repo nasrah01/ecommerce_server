@@ -31,6 +31,9 @@ app.use(cookieParser());
 
 app.use('/auth', authRoute)
 
+app.get("/", (req, res) => {
+  res.send('Welcome to shop-k')
+});
 
 const start = async() => {
   await connectDB(process.env.MONGO_URL)
