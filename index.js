@@ -27,8 +27,7 @@ app.use(cookieParser());
 app.use('/auth', authRoute)
 
 app.get("/", (req, res) => {
-  console.log("Cookies: ", req.cookies);
-  console.log("Signed Cookies: ", req.signedCookies);
+  res.send('Welcome to shop-k')
 });
 
 const start = async() => {
