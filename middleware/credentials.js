@@ -1,4 +1,4 @@
-const allowedOrigins = [
+export const allowedOrigins = [
   "https://grand-lokum-45486f.netlify.app",
   "http://localhost:3500",
   "http://localhost:3000",

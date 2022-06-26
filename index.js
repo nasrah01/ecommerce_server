@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import credentials from './middleware/credentials.js';
 import cors from "cors";
-import helmet from "helmet";
+import { allowedOrigins } from './middleware/credentials.js';
 import cookieParser from 'cookie-parser';
 import connectDB from './db/connect.js'
 import authRoute from './routes/authRoutes.js'
@@ -25,7 +25,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
