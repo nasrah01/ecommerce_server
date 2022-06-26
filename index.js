@@ -23,7 +23,11 @@ const corsOptions = {
     callback(new Error("Not allowed by CORS"));
   },
 };
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
