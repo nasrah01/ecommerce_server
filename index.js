@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
+import credentials from './middleware/credentials.js';
 import cors from "cors";
 import helmet from "helmet";
 import cookieParser from 'cookie-parser';
@@ -10,18 +11,17 @@ import authRoute from './routes/authRoutes.js'
 const app = express()
 const PORT = process.env.PORT || 5000;
 
-const whitelist = [
-  "http://localhost:3000",
-  "http://localhost:5000",
-  "https://grand-lokum-45486f.netlify.app/",
-];
-const corsOptions = {
-  credentials: true,
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) return callback(null, true);
+app.use(credentials)
 
-    callback(new Error("Not allowed by CORS"));
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
   },
+  optionsSuccessStatus: 200,
 };
 app.use(
   helmet({
